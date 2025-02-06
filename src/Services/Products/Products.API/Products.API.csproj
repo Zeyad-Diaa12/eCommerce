@@ -13,4 +13,13 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="API\v1\CreateProduct\Result\" />
+    <Folder Include="API\v1\DeleteProduct\" />
+    <Folder Include="API\v1\GetProductById\" />
+    <Folder Include="API\v1\GetproductByCategory\" />
+    <Folder Include="API\v1\GetAllProducts\" />
+    <Folder Include="API\v1\UpdateProduct\" />
+  </ItemGroup>
+
 </Project>
