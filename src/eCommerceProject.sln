@@ -5,9 +5,9 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{37200729-DE8B-4292-A5B3-31B07CF6C2CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{13B199DF-DF25-4DD7-93F9-EFEF6FEDFDC2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{A6241DF1-6A3D-41D6-97DD-F99DF8680ED8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.API", "Services\Catalog\Catalog.API\Catalog.API.csproj", "{EF28278B-2C24-42FC-9FCF-48E15FCAEB32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Products.API", "Services\Products\Products.API\Products.API.csproj", "{54876D66-B37B-469C-A739-AD5705DCC219}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,16 +15,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EF28278B-2C24-42FC-9FCF-48E15FCAEB32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF28278B-2C24-42FC-9FCF-48E15FCAEB32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF28278B-2C24-42FC-9FCF-48E15FCAEB32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF28278B-2C24-42FC-9FCF-48E15FCAEB32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54876D66-B37B-469C-A739-AD5705DCC219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54876D66-B37B-469C-A739-AD5705DCC219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54876D66-B37B-469C-A739-AD5705DCC219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54876D66-B37B-469C-A739-AD5705DCC219}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{13B199DF-DF25-4DD7-93F9-EFEF6FEDFDC2} = {37200729-DE8B-4292-A5B3-31B07CF6C2CF}
-		{EF28278B-2C24-42FC-9FCF-48E15FCAEB32} = {13B199DF-DF25-4DD7-93F9-EFEF6FEDFDC2}
+		{A6241DF1-6A3D-41D6-97DD-F99DF8680ED8} = {37200729-DE8B-4292-A5B3-31B07CF6C2CF}
+		{54876D66-B37B-469C-A739-AD5705DCC219} = {A6241DF1-6A3D-41D6-97DD-F99DF8680ED8}
 	EndGlobalSection
 EndGlobal
