@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="API\v1\DeleteProduct\" />
-    <Folder Include="API\v1\GetProductById\" />
     <Folder Include="API\v1\GetproductByCategory\" />
     <Folder Include="API\v1\UpdateProduct\" />
   </ItemGroup>
