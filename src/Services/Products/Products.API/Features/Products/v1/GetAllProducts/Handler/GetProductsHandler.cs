@@ -6,8 +6,21 @@ public class GetProductsQueryHandler
 {
     public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
     {
-        var products = await session.Query<Product>().ToListAsync(cancellationToken);
+        var products = await session.Query<Product>()
+            .ToPagedListAsync(query.PageNumber ?? 1, query.PageSize ?? 10, cancellationToken);
 
-        return new GetProductsResult(products);
+        var result = new GetProductsResult()
+        {
+            Records = products,
+            PageNumber = products.PageNumber,
+            PageSize = products.PageSize,
+            NumberOfRecordsReturned = products.TotalItemCount,
+            NumberOfRecordsInPage = products.Count,
+            NumberOfPages = products.PageCount,
+            HasNextPage = products.HasNextPage,
+            HasPreviousPage = products.HasPreviousPage,
+        };
+
+        return result;
     }
 }

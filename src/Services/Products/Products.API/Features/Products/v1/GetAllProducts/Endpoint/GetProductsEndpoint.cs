@@ -7,9 +7,11 @@ public class GetProductsEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("/api/v1/products",
-        async (ISender sender) =>
-        {
-            var result = await sender.Send(new GetProductsQuery());
+        async([AsParameters] GetProductsRequest  request, ISender sender) =>
+        { 
+            var query = request.Adapt<GetProductsQuery>();
+
+            var result = await sender.Send(query);
 
             var response = result.Adapt<GetProductsResponse>();
 
