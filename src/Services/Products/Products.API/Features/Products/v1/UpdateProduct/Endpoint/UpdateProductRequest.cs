@@ -1,7 +1,7 @@
 ﻿namespace Products.API.Features.Products.v1.UpdateProduct.Endpoint;
 
 public record UpdateProductRequest(
-    Guid Id,
+    Guid ProductId,
     decimal Price,
     string Name,
     string ImageFile,

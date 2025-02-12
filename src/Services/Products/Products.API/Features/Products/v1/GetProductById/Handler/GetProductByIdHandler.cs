@@ -2,9 +2,9 @@
 
 public class GetProductByIdQueryHandler
     (IDocumentSession session, ILogger<GetProductByIdQueryHandler> logger)
-    : IQueryHandler<GetproductByIdQuery, GetProductByIdResult>
+    : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
 {
-    public async Task<GetProductByIdResult> Handle(GetproductByIdQuery query, CancellationToken cancellationToken)
+    public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
         logger.LogInformation("GetProductByIdQueryHandler.Handle called with {@Query}", query);
 

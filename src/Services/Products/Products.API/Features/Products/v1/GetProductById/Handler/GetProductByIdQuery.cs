@@ -1,3 +1,3 @@
 ﻿namespace Products.API.Features.Products.v1.GetProductById.Handler;
 
-public record GetproductByIdQuery(Guid Id) : IQuery<GetProductByIdResult>;
+public record GetProductByIdQuery(Guid Id) : IQuery<GetProductByIdResult>;

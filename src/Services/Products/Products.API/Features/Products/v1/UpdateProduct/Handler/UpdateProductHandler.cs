@@ -8,7 +8,7 @@ public class UpdateProductCommandHandler
     {
         logger.LogInformation("UpdateProductCommandHandler.Handle called with {@Command}", command);
 
-        var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
+        var product = await session.LoadAsync<Product>(command.ProductId, cancellationToken);
 
         if (product is null)
         {
