@@ -1,3 +1,5 @@
+using Products.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,6 +19,11 @@ builder.Services.AddMarten(opts =>
 {
     opts.Connection(builder.Configuration.GetConnectionString("Products"));
 }).UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<InitialSeedData>();
+}
 
 builder.Services.AddExceptionHandler<CustomExcpetionHandler>();
 

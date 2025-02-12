@@ -24,12 +24,12 @@ public class LoggingBehaviour<TRequest, TResponse>
         timer.Stop();
 
         var timeTaken = timer.Elapsed;
-        if(timeTaken.Seconds > 6)
-            logger.LogWarning("[PERFORMANCE] Handle Request={Request} - TimeTaken={TimeTaken}",
-                typeof(TRequest).Name, timeTaken.Seconds);
+        if(timeTaken.Milliseconds > 8000)
+            logger.LogWarning("[PERFORMANCE] Handle Request={Request} - TimeTaken={TimeTaken}ms",
+                typeof(TRequest).Name, timeTaken.Milliseconds);
 
-        logger.LogInformation("[END] Handled Request={Request} - Response={Response} - TimeTaken={TimeTaken}s",
-            typeof(TRequest).Name, typeof(TResponse).Name, timeTaken.Seconds);
+        logger.LogInformation("[END] Handled Request={Request} - Response={Response} - TimeTaken={TimeTaken}ms",
+            typeof(TRequest).Name, typeof(TResponse).Name, timeTaken.Milliseconds);
         return response;
     }
 }
