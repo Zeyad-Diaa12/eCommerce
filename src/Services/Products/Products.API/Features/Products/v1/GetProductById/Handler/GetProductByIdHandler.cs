@@ -1,7 +1,7 @@
 ﻿namespace Products.API.Features.Products.v1.GetProductById.Handler;
 
 public class GetProductByIdQueryHandler
-    (IDocumentSession session, ILogger<GetProductByIdQueryHandler> logger)
+    (IDocumentSession session)
     : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
 {
     public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
