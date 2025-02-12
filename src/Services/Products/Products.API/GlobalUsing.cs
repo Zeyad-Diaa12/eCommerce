@@ -12,6 +12,9 @@ global using BuildingBlocks.Behaviours;
 global using BuildingBlocks.Exceptions.Handler;
 global using Marten.Pagination;
 global using BuildingBlocks.BaseResponse;
+global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+global using Products.API.Data;
+global using HealthChecks.UI.Client;
 
 
 
