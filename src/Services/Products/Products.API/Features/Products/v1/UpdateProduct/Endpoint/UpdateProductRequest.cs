@@ -6,5 +6,6 @@ public record UpdateProductRequest(
     string Name,
     string ImageFile,
     string Description,
+    int Stock,
     List<string> Category
 );

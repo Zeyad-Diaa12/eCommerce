@@ -12,7 +12,8 @@ public class CreateProductCommandHandler
             Price = command.Price,
             ImageFile = command.ImageFile,
             Description = command.Description,
-            Category = command.Category
+            Category = command.Category,
+            Stock = command.Stock
         };
 
         session.Store(product);

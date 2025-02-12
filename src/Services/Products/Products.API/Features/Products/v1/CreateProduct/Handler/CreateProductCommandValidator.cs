@@ -33,5 +33,9 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
         RuleFor(x => x.ImageFile)
             .NotEmpty()
             .WithMessage("ImageFile is required");
+
+        RuleFor(x => x.Stock)
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("Stock must be greater than or equal to 0");
     }
 }
