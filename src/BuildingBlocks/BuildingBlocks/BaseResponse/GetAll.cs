@@ -7,7 +7,7 @@ public record GetAllResponse<T> where T : class
     public long PageSize { get; set; }
     public long NumberOfPages { get; set; }
     public long NumberOfRecordsInPage { get; set; }
-    public long NumberOfRecordsReturned { get; set; }
+    public long NumberOfRecordsFound { get; set; }
     public bool HasPreviousPage { get; set; }
     public bool HasNextPage { get; set; }
 }

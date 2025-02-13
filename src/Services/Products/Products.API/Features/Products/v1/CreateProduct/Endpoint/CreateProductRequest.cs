@@ -5,5 +5,6 @@ public record CreateProductRequest(
     string Name,
     string ImageFile,
     string Description,
+    int Stock,
     List<string> Category
 );

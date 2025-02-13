@@ -18,6 +18,7 @@ public class UpdateProductCommandHandler
         product.Price = command.Price;
         product.Description = command.Description;
         product.ImageFile = command.ImageFile;
+        product.Stock = command.Stock;
 
         session.Store(product);
         await session.SaveChangesAsync(cancellationToken);

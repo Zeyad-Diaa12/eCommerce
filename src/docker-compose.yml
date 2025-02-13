@@ -1,24 +1,12 @@
-version: '3.8'
-
 services:
   productsdb:
     image: postgres
-    container_name: productsdb
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=ProductsDb
-    restart: always
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_products:/var/lib/postgresql/data
-    networks:
-      - eCommerce
+      
+  products.api:
+    image: ${DOCKER_REGISTRY-}productsapi
+    build:
+      context: .
+      dockerfile: Services/Products/Products.API/Dockerfile
 
 volumes:
-  postgres_products:
-
-networks:
-  eCommerce:
-    driver: bridge
+  products_postgresDb:

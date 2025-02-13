@@ -5,5 +5,6 @@ public record CreateProductCommand(
     string Name,
     string ImageFile,
     string Description,
+    int Stock,
     List<string> Category
 ) : ICommand<CreateProductResult>;

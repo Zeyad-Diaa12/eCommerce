@@ -6,5 +6,6 @@ public record UpdateProductCommand(
     string Name,
     string ImageFile,
     string Description,
+    int Stock,
     List<string> Category
 ) : ICommand<UpdateProductResult>;
