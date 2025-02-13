@@ -1,7 +1,10 @@
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var assembly = typeof(Program).Assembly;
+var connectionString = builder.Configuration.GetConnectionString("Products");
 
 builder.Services.AddMediatR(config =>
 {
@@ -15,7 +18,7 @@ builder.Services.AddCarter();
 
 builder.Services.AddMarten(opts =>
 {
-    opts.Connection(builder.Configuration.GetConnectionString("Products"));
+    opts.Connection(connectionString);
 }).UseLightweightSessions();
 
 if (builder.Environment.IsDevelopment())
@@ -26,7 +29,27 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddExceptionHandler<CustomExcpetionHandler>();
 
 builder.Services.AddHealthChecks()
-    .AddNpgSql(builder.Configuration.GetConnectionString("Products"));
+    .AddNpgSql(connectionString);
+
+
+//Add Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products.API", Version = "v1" });
+});
+
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(builder => {
+        builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -34,6 +57,10 @@ var app = builder.Build();
 app.MapCarter();
 
 app.UseExceptionHandler(options => { });
+app.UseRouting();
+
+//CORS
+app.UseCors();
 
 app.UseHealthChecks("/health",
     new HealthCheckOptions
@@ -41,5 +68,12 @@ app.UseHealthChecks("/health",
         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     }
 );
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
