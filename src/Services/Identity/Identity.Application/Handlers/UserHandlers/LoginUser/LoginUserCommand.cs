@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BuildingBlocks.CQRS.Command;
 
 namespace Identity.Application.Handlers.UserHandlers.LoginUser;
 
-internal class LoginUserCommand
-{
-}
+public record LoginUserCommand(
+    string Email,
+    string Password,
+    string Username,
+    string PhoneNumber
+) : ICommand<LoginUserResult>;

@@ -1,4 +1,5 @@
-﻿using Identity.Application.Handlers.UserHandlers.RegisterUser;
+﻿using Identity.Application.Handlers.UserHandlers.LoginUser;
+using Identity.Application.Handlers.UserHandlers.RegisterUser;
 using Identity.Application.IServices;
 using Identity.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,11 @@ public class AuthService
     (UserManager<User> userManager, SignInManager<User> signInManager)
     : IAuthService
 {
+    public Task<LoginUserResult> LogInAsync(LoginUserCommand command)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<bool> RegisterAsync(RegisterUserCommand command)
     {
         var user = new User

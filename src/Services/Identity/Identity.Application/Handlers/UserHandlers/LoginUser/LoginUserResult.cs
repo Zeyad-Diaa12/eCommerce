@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Identity.Application.Handlers.UserHandlers.LoginUser
-{
-    internal class LoginUserResult
-    {
-    }
-}
+namespace Identity.Application.Handlers.UserHandlers.LoginUser;
+
+public record LoginUserResult(
+    string Token,
+    string RefreshToken,
+    DateTime Expires
+);

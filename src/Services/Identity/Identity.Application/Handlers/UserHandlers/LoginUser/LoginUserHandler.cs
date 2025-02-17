@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Identity.Application.Handlers.UserHandlers.LoginUser
+namespace Identity.Application.Handlers.UserHandlers.LoginUser;
+
+public class LoginUserHandler
 {
-    internal class LoginUserHandler
-    {
-    }
 }

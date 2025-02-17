@@ -1,7 +1,5 @@
-using BuildingBlocks.Behaviours;
 using BuildingBlocks.Exceptions.Handler;
 using Carter;
-using FluentValidation;
 using HealthChecks.UI.Client;
 using Identity.Application;
 using Identity.Infrastructure;
@@ -38,6 +36,8 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader();
     });
 });
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddIdentityApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

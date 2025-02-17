@@ -31,6 +31,7 @@ public static class Injection
         services.AddValidatorsFromAssembly(assembly);
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITokenProvider, TokenProvider>();
         return services;
     }
 }
