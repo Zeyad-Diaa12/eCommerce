@@ -2,7 +2,8 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Identity.Application.Handlers.UserHandlers.LoginUser;
+using BuildingBlocks.Helpers;
+using Identity.Application.Handlers.AuthHandlers.LoginUser;
 using Identity.Application.IServices;
 using Identity.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
@@ -15,12 +16,12 @@ namespace Identity.Application.Services;
 
 public class TokenProvider : ITokenProvider
 {
-    private readonly JwtOptions _jwtOptions;
+    private readonly JwtSettings _jwtOptions;
     private readonly UserManager<User> _userManager;
     //private readonly IDistributedCache _cache;
 
     public TokenProvider(
-        IOptions<JwtOptions> jwtOptions,
+        IOptions<JwtSettings> jwtOptions,
         UserManager<User> userManager)
     {
         _jwtOptions = jwtOptions.Value;
@@ -36,11 +37,17 @@ public class TokenProvider : ITokenProvider
 
             //await StoreRefreshToken(user.Id, GetJtiFromClaims(claims), refreshToken);
 
+        
+            var tokenDate = token.ValidTo;
+            var currentDate = DateTime.UtcNow;
+
+            var totalMinutes = (int)(tokenDate - currentDate).TotalMinutes;
+
             return new LoginUserResult
             (
                 new JwtSecurityTokenHandler().WriteToken(token),
                 refreshToken,
-                token.ValidTo
+                totalMinutes
             );
     }
 
@@ -99,7 +106,9 @@ public class TokenProvider : ITokenProvider
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(ClaimTypes.Email, user.Email),
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(JwtRegisteredClaimNames.UniqueName, user.UserName),
+            new("emailConfirmed", $"{user.EmailConfirmed}"),
             new("fullName", $"{user.FullName}")
         };
 
@@ -109,13 +118,13 @@ public class TokenProvider : ITokenProvider
 
     private JwtSecurityToken CreateJwtToken(IEnumerable<Claim> claims)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         return new JwtSecurityToken(
             issuer: _jwtOptions.Issuer,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiryMinutes),
+            expires: DateTime.UtcNow.AddMinutes(_jwtOptions.AccessTokenExpiration),
             signingCredentials: credentials);
     }
 
@@ -172,7 +181,7 @@ public class TokenProvider : ITokenProvider
             ValidateIssuerSigningKey = true,
             ValidIssuer = _jwtOptions.Issuer,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtOptions.Key))
+                Encoding.UTF8.GetBytes(_jwtOptions.Secret))
         }, out _);
 
         return principal;

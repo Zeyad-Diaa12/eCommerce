@@ -24,6 +24,7 @@ public class RegisterUserEndpoint : ICarterModule
         .Produces<RegisterUserResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Register User")
-        .WithDescription("Register User");
+        .WithDescription("Register User")
+        .AllowAnonymous();
     }
 }

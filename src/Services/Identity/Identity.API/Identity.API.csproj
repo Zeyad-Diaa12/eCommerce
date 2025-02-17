@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Roles\" />
+  </ItemGroup>
+
 </Project>

@@ -1,21 +1,43 @@
-﻿using Identity.Application.Handlers.UserHandlers.LoginUser;
+﻿using BuildingBlocks.Exceptions;
+using Identity.Application.Handlers.AuthHandlers.LoginUser;
 using Identity.Application.Handlers.UserHandlers.RegisterUser;
 using Identity.Application.IServices;
 using Identity.Domain.Entites;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Identity.Application.Services;
 
 public class AuthService
-    (UserManager<User> userManager, SignInManager<User> signInManager)
+    (UserManager<User> userManager,
+    SignInManager<User> signInManager,
+    ITokenProvider tokenProvider)
     : IAuthService
 {
-    public Task<LoginUserResult> LogInAsync(LoginUserCommand command)
+    public async Task<LoginUserResult> LogInAsync(LoginUserCommand command)
+    {
+        var user = await FindUserByIdentifierAsync(command.Email, command.Username, command.PhoneNumber);
+
+        if (user == null)
+        {
+            throw new NotFoundException("User not found"); 
+        }
+
+        var result = await signInManager.CheckPasswordSignInAsync(user, command.Password, false);
+
+        if (!result.Succeeded)
+        {
+            throw new BadRequestException("Wrong Password");
+        }
+
+        return await tokenProvider.GenerateToken(user);
+    }
+
+    public Task<bool> LogOutAsync(string token)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<LoginUserResult> RefreshTokenAsync(string token, string refreshToken)
     {
         throw new NotImplementedException();
     }
@@ -37,4 +59,30 @@ public class AuthService
         
         return result.Succeeded;
     }
+
+
+    #region Helpers
+    private async Task<User?> FindUserByIdentifierAsync(string? email, string? username, string? phoneNumber)
+    {
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            var userByEmail = await userManager.FindByEmailAsync(email);
+            if (userByEmail != null) return userByEmail;
+        }
+
+        if (!string.IsNullOrWhiteSpace(username))
+        {
+            var userByUsername = await userManager.FindByNameAsync(username);
+            if (userByUsername != null) return userByUsername;
+        }
+
+        if (!string.IsNullOrWhiteSpace(phoneNumber))
+        {
+            var userByPhone = userManager.Users.FirstOrDefault(u => u.PhoneNumber == phoneNumber);
+            if (userByPhone != null) return userByPhone;
+        }
+
+        return null;
+    }
+    #endregion
 }

@@ -84,6 +84,11 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
         RuleFor(x => x.PhoneNumber)
             .NotEmpty()
             .WithMessage("Phone number is required")
-            .IsValidPhoneNumber();
+            .IsValidPhoneNumber()
+            .Must((phoneNumber) =>
+            {
+                var user = userManager.Users.FirstOrDefault(u => u.PhoneNumber == phoneNumber);
+                return user == null;
+            }).WithMessage("Phone Number already exists");
     }
 }

@@ -1,4 +1,4 @@
-﻿using Identity.Application.Handlers.UserHandlers.LoginUser;
+﻿using Identity.Application.Handlers.AuthHandlers.LoginUser;
 using Identity.Domain.Entites;
 
 
