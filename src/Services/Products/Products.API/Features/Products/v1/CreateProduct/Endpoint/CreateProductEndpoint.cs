@@ -22,6 +22,6 @@ public class CreateProductEndpoint : ICarterModule
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Create Product")
         .WithDescription("Create Product")
-        .RequireAuthorization("SuperAdmin,Admin");
+        .RequireAuthorization("RequireAdminRole");
     }
 }

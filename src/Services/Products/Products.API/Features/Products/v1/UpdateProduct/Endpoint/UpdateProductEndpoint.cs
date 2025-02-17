@@ -22,6 +22,6 @@ public class UpdateProductEndpoint : ICarterModule
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Update Product")
         .WithDescription("Update Product")
-        .RequireAuthorization("SuperAdmin,Admin");
+        .RequireAuthorization("RequireAdminRole");
     }
 }
