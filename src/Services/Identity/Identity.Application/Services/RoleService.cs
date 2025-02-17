@@ -132,8 +132,7 @@ public class RoleService : IRoleService
 
             if (users.Count() > 0)
             {
-                throw new ValidationException(
-                    $"Cannot delete role '{roleName}' with assigned users");
+                throw new ValidationException($"Cannot delete role '{roleName}' with assigned users");
             }
 
             var result = await _roleManager.DeleteAsync(role);

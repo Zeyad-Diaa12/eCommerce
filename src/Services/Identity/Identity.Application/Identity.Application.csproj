@@ -17,18 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\RoleHandlers\CreateRole\" />
-    <Folder Include="Handlers\RoleHandlers\AssignRoleToUser\" />
     <Folder Include="Handlers\RoleHandlers\CheckRoleExists\" />
     <Folder Include="Handlers\RoleHandlers\GetAllRoles\" />
     <Folder Include="Handlers\RoleHandlers\GetUsersInRole\" />
-    <Folder Include="Handlers\RoleHandlers\DeleteRole\" />
     <Folder Include="Handlers\RoleHandlers\CheckUserHasRole\" />
     <Folder Include="Handlers\RoleHandlers\GetUserRoles\" />
-    <Folder Include="Handlers\RoleHandlers\AssignBulk\" />
-    <Folder Include="Handlers\RoleHandlers\RemoveBulk\" />
-    <Folder Include="Handlers\RoleHandlers\UpdateRole\" />
-    <Folder Include="Handlers\RoleHandlers\RemoveRoleFromUser\" />
   </ItemGroup>
 
 </Project>
