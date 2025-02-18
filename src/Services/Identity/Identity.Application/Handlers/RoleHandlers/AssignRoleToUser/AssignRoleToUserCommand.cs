@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BuildingBlocks.CQRS.Command;
 
 namespace Identity.Application.Handlers.RoleHandlers.AssignRoleToUser;
 
-public class AssignRoleToUserCommand
-{
-}
+public record AssignRoleToUserCommand(string UserId, string RoleName) : ICommand<AssignRoleToUserResult>;

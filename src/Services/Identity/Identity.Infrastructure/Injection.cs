@@ -47,6 +47,9 @@ public static class Injection
 
         services.AddAuthorization(options =>
         {
+            options.AddPolicy("RequireSuperAdminRole",
+                policy => policy.RequireRole("SuperAdmin"));
+
             options.AddPolicy("RequireAdminRole",
                 policy => policy.RequireRole("Admin", "SuperAdmin"));
 
