@@ -25,3 +25,15 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  identitydb:
+    container_name: identitydb
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password@SqlServer123
+      - MSSQL_PID=Developer
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - identity_mssqlDb:/var/opt/mssql
