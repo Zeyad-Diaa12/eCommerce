@@ -33,6 +33,7 @@ public static class Injection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenProvider, TokenProvider>();
         services.AddScoped<IRoleService, RoleService>();
+
         return services;
     }
 }

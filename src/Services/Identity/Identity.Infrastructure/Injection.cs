@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Behaviours;
-using FluentValidation;
+﻿using BuildingBlocks.Cache;
 using Identity.Domain.Entites;
 using Identity.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
 using System.Text;
 
 
@@ -18,6 +16,14 @@ public static class Injection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = config.GetConnectionString("Redis");
+            options.InstanceName = "IdentityCache_";
+        });
+
+        services.AddScoped<ICacheService, CacheService>();
+
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(config.GetConnectionString("Identity")));
 
@@ -37,7 +43,7 @@ public static class Injection
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidateAudience = false,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = config["Jwt:Issuer"],

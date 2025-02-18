@@ -2,7 +2,9 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using BuildingBlocks.Cache;
 using Identity.Application.Handlers.AuthHandlers.LoginUser;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,14 +14,16 @@ public class TokenProvider : ITokenProvider
 {
     private readonly JwtSettings _jwtOptions;
     private readonly UserManager<User> _userManager;
-    //private readonly IDistributedCache _cache;
+    private readonly ICacheService _cache;
 
     public TokenProvider(
         IOptions<JwtSettings> jwtOptions,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        ICacheService cache)
     {
         _jwtOptions = jwtOptions.Value;
         _userManager = userManager;
+        _cache = cache;
     }
 
     public async Task<LoginUserResult> GenerateToken(User user)
@@ -29,9 +33,9 @@ public class TokenProvider : ITokenProvider
             var token = CreateJwtToken(claims);
             var refreshToken = GenerateRefreshToken();
 
-            //await StoreRefreshToken(user.Id, GetJtiFromClaims(claims), refreshToken);
+            await StoreRefreshToken(user.Id, GetJtiFromClaims(claims), refreshToken);
 
-        
+
             var tokenDate = token.ValidTo;
             var currentDate = DateTime.UtcNow;
 
@@ -53,8 +57,8 @@ public class TokenProvider : ITokenProvider
         var jti = principal.FindFirstValue(JwtRegisteredClaimNames.Jti);
         var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        //await BlacklistToken(jti);
-        //await RemoveRefreshToken(userId, jti);
+        await BlacklistToken(jti);
+        await RemoveRefreshToken(userId, jti);
 
         return true;
     }
@@ -68,31 +72,31 @@ public class TokenProvider : ITokenProvider
         var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
         var jti = principal.FindFirstValue(JwtRegisteredClaimNames.Jti);
 
-        //if (await IsTokenBlacklisted(jti))
-        //    throw new SecurityTokenException("Token revoked");
+        if (await IsTokenBlacklisted(jti))
+            throw new SecurityTokenException("Token revoked");
 
         var user = await _userManager.FindByIdAsync(userId)
             ?? throw new SecurityTokenException("User not found");
 
-        //if (!await ValidateRefreshToken(userId, jti, refreshToken))
-        //    throw new SecurityTokenException("Invalid refresh token");
+        if (!await ValidateRefreshToken(userId, jti, refreshToken))
+            throw new SecurityTokenException("Invalid refresh token");
 
-        //await InvalidateOldTokens(userId, jti);
+        await InvalidateOldTokens(userId, jti);
 
         return await GenerateToken(user);
     }
 
-    //private async Task<bool> ValidateRefreshToken(string userId, string jti, string refreshToken)
-    //{
-    //    var storedToken = await _cache.GetStringAsync($"refresh_tokens:{userId}:{jti}");
-    //    return storedToken == refreshToken;
-    //}
+    private async Task<bool> ValidateRefreshToken(string userId, string jti, string refreshToken)
+    {
+        var storedToken = await _cache.GetAsync<string>($"refresh_tokens:{userId}:{jti}");
+        return storedToken == refreshToken;
+    }
 
-    //private async Task InvalidateOldTokens(string userId, string oldJti)
-    //{
-    //    await BlacklistToken(oldJti);
-    //    await RemoveRefreshToken(userId, oldJti);
-    //}
+    private async Task InvalidateOldTokens(string userId, string oldJti)
+    {
+        await BlacklistToken(oldJti);
+        await RemoveRefreshToken(userId, oldJti);
+    }
 
     private List<Claim> CreateClaims(User user, IList<string> roles)
     {
@@ -130,39 +134,39 @@ public class TokenProvider : ITokenProvider
         return Convert.ToBase64String(randomNumber);
     }
 
-    //private async Task StoreRefreshToken(string userId, string jti, string refreshToken)
-    //{
-    //    await _cache.SetStringAsync(
-    //        $"refresh_tokens:{userId}:{jti}",
-    //        refreshToken,
-    //        new DistributedCacheEntryOptions
-    //        {
-    //            AbsoluteExpirationRelativeToNow =
-    //                TimeSpan.FromDays(_jwtOptions.RefreshTokenExpiration)
-    //        });
-    //}
+    private async Task StoreRefreshToken(string userId, string jti, string refreshToken)
+    {
+        await _cache.SetAsync(
+            $"refresh_tokens:{userId}:{jti}",
+            refreshToken,
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow =
+                    TimeSpan.FromSeconds(_jwtOptions.RefreshTokenExpiration)
+            });
+    }
 
-    //private async Task RemoveRefreshToken(string userId, string jti)
-    //{
-    //    await _cache.RemoveAsync($"refresh_tokens:{userId}:{jti}");
-    //}
+    private async Task RemoveRefreshToken(string userId, string jti)
+    {
+        await _cache.RemoveAsync($"refresh_tokens:{userId}:{jti}");
+    }
 
-    //private async Task BlacklistToken(string jti)
-    //{
-    //    await _cache.SetStringAsync(
-    //        $"blacklisted_tokens:{jti}",
-    //        "revoked",
-    //        new DistributedCacheEntryOptions
-    //        {
-    //            AbsoluteExpirationRelativeToNow =
-    //                TimeSpan.FromMinutes(_jwtOptions.AccessTokenExpiration)
-    //        });
-    //}
+    private async Task BlacklistToken(string jti)
+    {
+        await _cache.SetAsync(
+            $"blacklisted_tokens:{jti}",
+            "revoked",
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow =
+                    TimeSpan.FromSeconds(_jwtOptions.AccessTokenExpiration)
+            });
+    }
 
-    //private async Task<bool> IsTokenBlacklisted(string jti)
-    //{
-    //    return await _cache.GetStringAsync($"blacklisted_tokens:{jti}") != null;
-    //}
+    private async Task<bool> IsTokenBlacklisted(string jti)
+    {
+        return await _cache.GetAsync<string>($"blacklisted_tokens:{jti}") != null;
+    }
 
     private ClaimsPrincipal? GetPrincipalFromToken(string token, bool validateLifetime)
     {

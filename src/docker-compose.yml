@@ -1,4 +1,7 @@
 services:
+  redis:
+    image: redis
+
   productsdb:
     image: postgres
       
@@ -20,4 +23,5 @@ services:
 volumes:
   products_postgresDb:
   identity_mssqlDb:
+  redis_data:
 
