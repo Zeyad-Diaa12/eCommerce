@@ -144,26 +144,6 @@ public class RoleService : IRoleService
         var user = await GetUserByIdAsync(userId);
         return await _userManager.GetRolesAsync(user);
     }
-    public async Task<bool> UpdateRoleAsync(string oldRoleName, string newRoleName)
-    {
-        if (oldRoleName == "SuperAdmin" || newRoleName == "SuperAdmin")
-        {
-            throw new ValidationException("Cannot modify Super Admin role");
-        }
-
-        var role = await _roleManager.FindByNameAsync(oldRoleName)
-                        ?? throw new NotFoundException($"Role '{oldRoleName}' not found");
-
-        if (await _roleManager.RoleExistsAsync(newRoleName))
-        {
-            throw new ValidationException($"Role '{newRoleName}' already exists");
-        }
-
-        role.Name = newRoleName;
-        var result = await _roleManager.UpdateAsync(role);
-            
-        return result.Succeeded;
-    }
 
     public async Task<bool> AssignUsersToRoleBulkAsync(List<string> userIds, string roleName)
     {

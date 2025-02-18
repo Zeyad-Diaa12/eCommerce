@@ -12,7 +12,6 @@ public interface IRoleService
     Task<IEnumerable<UserRoleResponse>> GetUsersInRoleAsync(string roleName);
     Task<bool> DeleteRoleAsync(string roleName);
     Task<bool> CheckUserHasRoleAsync(string userId, string roleName);
-    Task<bool> UpdateRoleAsync(string oldRoleName, string newRoleName);
     Task<bool> AssignUsersToRoleBulkAsync(List<string> userIds, string roleName);
     Task<bool> RemoveUsersFromRoleBulkAsync(List<string> userIds, string roleName);
 }
