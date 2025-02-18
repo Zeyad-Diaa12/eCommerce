@@ -1,7 +1,4 @@
-﻿using Carter;
-using Identity.Application.Handlers.RoleHandlers.AssignRoleToUser;
-using Mapster;
-using MediatR;
+﻿using Identity.Application.Handlers.RoleHandlers.AssignRoleToUser;
 
 namespace Identity.API.Features.Roles.v1.AssignRoleToUser;
 
@@ -18,6 +15,7 @@ public class AssignRoleToUserEndpoint : ICarterModule
             return Results.Ok(response);
         })
         .WithName("AssignRoleToUser")
+        .WithTags("RoleManager")
         .Produces<AssignRoleToUserResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Assign Role To User")

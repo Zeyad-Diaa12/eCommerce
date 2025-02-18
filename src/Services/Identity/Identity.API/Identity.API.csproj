@@ -34,8 +34,6 @@
     <Folder Include="Features\Roles\v1\AssignBulk\" />
     <Folder Include="Features\Roles\v1\CheckRoleExists\" />
     <Folder Include="Features\Roles\v1\CheckUserHasRole\" />
-    <Folder Include="Features\Roles\v1\CreateRole\" />
-    <Folder Include="Features\Roles\v1\DeleteRole\" />
     <Folder Include="Features\Roles\v1\GetAllRoles\" />
     <Folder Include="Features\Roles\v1\GetUserRoles\" />
     <Folder Include="Features\Roles\v1\GetUsersInRole\" />

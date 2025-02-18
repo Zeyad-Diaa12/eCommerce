@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.CQRS.Command;
-
-namespace Identity.Application.Handlers.AuthHandlers.LoginUser;
+﻿namespace Identity.Application.Handlers.AuthHandlers.LoginUser;
 
 public record LoginUserCommand(
     string Email,

@@ -1,8 +1,4 @@
-﻿using BuildingBlocks.Exceptions;
-using Identity.Application.DTOs;
-using Identity.Domain.Entites;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using Identity.Application.DTOs;
 
 namespace Identity.Application.Services;
 
@@ -34,57 +30,43 @@ public class RoleService : IRoleService
 
     public async Task<bool> AssignRoleToUserAsync(string userId, string roleName)
     {
-        try
+        if(roleName == "SuperAdmin")
         {
-            if(roleName == "SuperAdmin")
-            {
-                throw new ValidationException("Cannot assign SuperAdmin role to user");
-            }
-
-            var user = await GetUserByIdAsync(userId);
-
-            if (!await _roleManager.RoleExistsAsync(roleName))
-            {
-                throw new NotFoundException($"Role '{roleName}' does not exist");
-            }
-
-            if (await _userManager.IsInRoleAsync(user, roleName))
-            {
-                throw new BadRequestException($"User already has role '{roleName}'");
-            }
-
-            var result = await _userManager.AddToRoleAsync(user, roleName);
-            return result.Succeeded;
+            throw new ValidationException("Cannot assign SuperAdmin role to user");
         }
-        catch (Exception ex)
+
+        var user = await GetUserByIdAsync(userId);
+
+        if (!await _roleManager.RoleExistsAsync(roleName))
         {
-            throw new InternalServerException(ex.Message);
+            throw new NotFoundException($"Role '{roleName}' does not exist");
         }
+
+        if (await _userManager.IsInRoleAsync(user, roleName))
+        {
+            throw new BadRequestException($"User already has role '{roleName}'");
+        }
+
+        var result = await _userManager.AddToRoleAsync(user, roleName);
+        return result.Succeeded;
     }
 
     public async Task<bool> RemoveRoleFromUserAsync(string userId, string roleName)
     {
-        try
+        var user = await GetUserByIdAsync(userId);
+
+        if (!await _userManager.IsInRoleAsync(user, roleName))
         {
-            var user = await GetUserByIdAsync(userId);
-
-            if (!await _userManager.IsInRoleAsync(user, roleName))
-            {
-                throw new ValidationException($"User does not have role '{roleName}'");
-            }
-
-            if (await _userManager.IsInRoleAsync(user, "SuperAdmin"))
-            {
-                throw new ValidationException("Cannot modify roles for Super Admin Users");
-            }
-
-            var result = await _userManager.RemoveFromRoleAsync(user, roleName);
-            return result.Succeeded;
+            throw new ValidationException($"User does not have role '{roleName}'");
         }
-        catch (Exception ex) 
-        { 
-            throw new InternalServerException(ex.Message);
+
+        if (await _userManager.IsInRoleAsync(user, "SuperAdmin"))
+        {
+            throw new ValidationException("Cannot modify roles for Super Admin Users");
         }
+
+        var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+        return result.Succeeded;
     }
 
     public async Task<bool> CheckRoleExistsAsync(string roleName)
@@ -114,34 +96,27 @@ public class RoleService : IRoleService
 
     public async Task<bool> DeleteRoleAsync(string roleName)
     {
-        try
+        var role = await _roleManager.FindByNameAsync(roleName);
+
+        if (role == null)
         {
-            var role = await _roleManager.FindByNameAsync(roleName);
-
-            if (role == null)
-            {
-                throw new NotFoundException($"Role '{roleName}' not found");
-            }
-
-            if (role.Name == "SuperAdmin")
-            {
-                throw new ValidationException("Cannot delete Super Admin role");
-            }
-
-            var users = await GetUsersInRoleAsync(roleName);
-
-            if (users.Count() > 0)
-            {
-                throw new ValidationException($"Cannot delete role '{roleName}' with assigned users");
-            }
-
-            var result = await _roleManager.DeleteAsync(role);
-            return result.Succeeded;
+            throw new NotFoundException($"Role '{roleName}' not found");
         }
-        catch (Exception ex)
+
+        if (role.Name == "SuperAdmin")
         {
-            throw new InternalServerException(ex.Message);
+            throw new ValidationException("Cannot delete Super Admin role");
         }
+
+        var users = await GetUsersInRoleAsync(roleName);
+
+        if (users.Count() > 0)
+        {
+            throw new ValidationException($"Cannot delete role '{roleName}' with assigned users");
+        }
+
+        var result = await _roleManager.DeleteAsync(role);
+        return result.Succeeded;
     }
 
     public async Task<bool> CheckUserHasRoleAsync(string userId, string roleName)
@@ -157,31 +132,23 @@ public class RoleService : IRoleService
     }
     public async Task<bool> UpdateRoleAsync(string oldRoleName, string newRoleName)
     {
-        try
+        if (oldRoleName == "SuperAdmin" || newRoleName == "SuperAdmin")
         {
+            throw new ValidationException("Cannot modify Super Admin role");
+        }
 
-            if (oldRoleName == "SuperAdmin" || newRoleName == "SuperAdmin")
-            {
-                throw new ValidationException("Cannot modify Super Admin role");
-            }
+        var role = await _roleManager.FindByNameAsync(oldRoleName)
+                        ?? throw new NotFoundException($"Role '{oldRoleName}' not found");
 
-            var role = await _roleManager.FindByNameAsync(oldRoleName)
-                            ?? throw new NotFoundException($"Role '{oldRoleName}' not found");
+        if (await _roleManager.RoleExistsAsync(newRoleName))
+        {
+            throw new ValidationException($"Role '{newRoleName}' already exists");
+        }
 
-            if (await _roleManager.RoleExistsAsync(newRoleName))
-            {
-                throw new ValidationException($"Role '{newRoleName}' already exists");
-            }
-
-            role.Name = newRoleName;
-            var result = await _roleManager.UpdateAsync(role);
+        role.Name = newRoleName;
+        var result = await _roleManager.UpdateAsync(role);
             
-            return result.Succeeded;
-        }
-        catch (Exception ex)
-        {
-            throw new InternalServerException(ex.Message);
-        }
+        return result.Succeeded;
     }
 
     public async Task<bool> AssignUsersToRoleBulkAsync(List<string> userIds, string roleName)

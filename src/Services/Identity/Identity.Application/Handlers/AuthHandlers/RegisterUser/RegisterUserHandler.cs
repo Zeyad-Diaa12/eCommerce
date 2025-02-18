@@ -1,13 +1,8 @@
-﻿using Identity.Application.IServices;
-using Identity.Domain.Entites;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-
-namespace Identity.Application.Handlers.UserHandlers.RegisterUser;
+﻿namespace Identity.Application.Handlers.UserHandlers.RegisterUser;
 
 public class RegisterUserHandler
     (IAuthService authService) 
-    : IRequestHandler<RegisterUserCommand, RegisterUserResult>
+    : ICommandHandler<RegisterUserCommand, RegisterUserResult>
 {
     public async Task<RegisterUserResult> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {

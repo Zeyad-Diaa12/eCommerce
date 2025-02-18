@@ -1,11 +1,4 @@
-﻿using BuildingBlocks.Helpers;
-using FluentValidation;
-using Identity.Domain.Entites;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-
-
-namespace Identity.Application.Handlers.UserHandlers.RegisterUser;
+﻿namespace Identity.Application.Handlers.UserHandlers.RegisterUser;
 
 public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {

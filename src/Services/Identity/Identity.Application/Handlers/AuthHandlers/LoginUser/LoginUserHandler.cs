@@ -1,7 +1,4 @@
-﻿using BuildingBlocks.CQRS.Command;
-using Identity.Application.IServices;
-
-namespace Identity.Application.Handlers.AuthHandlers.LoginUser;
+﻿namespace Identity.Application.Handlers.AuthHandlers.LoginUser;
 
 public class LoginUserHandler
     (IAuthService authService)

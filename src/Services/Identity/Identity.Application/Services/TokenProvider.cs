@@ -2,13 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using BuildingBlocks.Helpers;
 using Identity.Application.Handlers.AuthHandlers.LoginUser;
-using Identity.Application.IServices;
-using Identity.Domain.Entites;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

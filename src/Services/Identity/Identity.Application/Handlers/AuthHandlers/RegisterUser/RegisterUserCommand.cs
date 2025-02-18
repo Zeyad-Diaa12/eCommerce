@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.CQRS.Command;
-
-namespace Identity.Application.Handlers.UserHandlers.RegisterUser;
+﻿namespace Identity.Application.Handlers.UserHandlers.RegisterUser;
 
 public record RegisterUserCommand(
     string FirstName, 

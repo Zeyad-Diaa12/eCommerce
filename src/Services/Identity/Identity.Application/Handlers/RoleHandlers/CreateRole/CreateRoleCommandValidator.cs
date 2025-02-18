@@ -1,9 +1,4 @@
-﻿using FluentValidation;
-using Identity.Domain.Entites;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Identity.Application.Handlers.RoleHandlers.CreateRole;
+﻿namespace Identity.Application.Handlers.RoleHandlers.CreateRole;
 
 public class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
 {

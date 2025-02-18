@@ -1,7 +1,4 @@
-﻿using Carter;
-using Identity.Application.Handlers.UserHandlers.RegisterUser;
-using Mapster;
-using MediatR;
+﻿using Identity.Application.Handlers.UserHandlers.RegisterUser;
 
 namespace Identity.API.Features.Auth.v1.RegisterUser;
 
@@ -21,6 +18,7 @@ public class RegisterUserEndpoint : ICarterModule
             return Results.Created($"/api/v1/auth/register", response);
         })
         .WithName("RegisterUser")
+        .WithTags("Authorization")
         .Produces<RegisterUserResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Register User")

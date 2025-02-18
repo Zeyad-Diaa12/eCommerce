@@ -1,8 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Identity.Application.Handlers.RoleHandlers.DeleteRole;
+﻿namespace Identity.Application.Handlers.RoleHandlers.DeleteRole;
 
 public class DeleteRoleCommandValidator : AbstractValidator<DeleteRoleCommand>
 {

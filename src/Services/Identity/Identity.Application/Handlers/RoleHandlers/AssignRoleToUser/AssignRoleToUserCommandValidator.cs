@@ -1,8 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Identity.Application.Handlers.RoleHandlers.AssignRoleToUser;
+﻿namespace Identity.Application.Handlers.RoleHandlers.AssignRoleToUser;
 
 public class AssignRoleToUserCommandValidator : AbstractValidator<AssignRoleToUserCommand>
 {

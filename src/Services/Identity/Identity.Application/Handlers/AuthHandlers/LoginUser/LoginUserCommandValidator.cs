@@ -1,11 +1,4 @@
-﻿using BuildingBlocks.Helpers;
-using FluentValidation;
-using Identity.Domain.Entites;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-
-namespace Identity.Application.Handlers.AuthHandlers.LoginUser;
+﻿namespace Identity.Application.Handlers.AuthHandlers.LoginUser;
 
 public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 {
