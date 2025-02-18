@@ -38,7 +38,6 @@
     <Folder Include="Features\Roles\v1\GetUserRoles\" />
     <Folder Include="Features\Roles\v1\GetUsersInRole\" />
     <Folder Include="Features\Roles\v1\RemoveBulk\" />
-    <Folder Include="Features\Roles\v1\RemoveRoleFromUser\" />
     <Folder Include="Features\Roles\v1\UpdateRole\" />
   </ItemGroup>
 

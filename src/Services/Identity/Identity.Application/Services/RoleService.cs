@@ -47,13 +47,24 @@ public class RoleService : IRoleService
             throw new BadRequestException($"User already has role '{roleName}'");
         }
 
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var currentRole = userRoles.FirstOrDefault();
+
+        await _userManager.RemoveFromRoleAsync(user, currentRole!);
+
         var result = await _userManager.AddToRoleAsync(user, roleName);
+        
         return result.Succeeded;
     }
 
     public async Task<bool> RemoveRoleFromUserAsync(string userId, string roleName)
     {
         var user = await GetUserByIdAsync(userId);
+        if(roleName == "SuperAdmin")
+        {
+            throw new ValidationException("Cannot remove SuperAdmin role from user");
+        }
 
         if (!await _userManager.IsInRoleAsync(user, roleName))
         {
@@ -64,8 +75,11 @@ public class RoleService : IRoleService
         {
             throw new ValidationException("Cannot modify roles for Super Admin Users");
         }
-
+        
         var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+        
+        await _userManager.AddToRoleAsync(user, "User");
+
         return result.Succeeded;
     }
 

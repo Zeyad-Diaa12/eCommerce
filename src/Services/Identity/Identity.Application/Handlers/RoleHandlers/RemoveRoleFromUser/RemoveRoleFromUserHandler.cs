@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Identity.Application.Handlers.RoleHandlers.RemoveRoleFromUser;
 
-namespace Identity.Application.Handlers.RoleHandlers.RemoveRoleFromUser;
-
-public class RemoveRoleFromUserHandler
+public class RemoveRoleFromUserCommandHandler 
+    (IRoleService roleService)
+    : ICommandHandler<RemoveRoleFromUserCommand, RemoveRoleFromUserResult>
 {
+    public async Task<RemoveRoleFromUserResult> Handle(RemoveRoleFromUserCommand command, CancellationToken cancellationToken)
+    {
+        var result = await roleService.RemoveRoleFromUserAsync(command.UserId, command.RoleName);
+
+        return new RemoveRoleFromUserResult(result);
+    }
 }
