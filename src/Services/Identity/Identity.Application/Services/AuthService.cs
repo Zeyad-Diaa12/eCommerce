@@ -10,6 +10,7 @@ namespace Identity.Application.Services;
 public class AuthService
     (UserManager<User> userManager,
     SignInManager<User> signInManager,
+    RoleManager<IdentityRole> roleManager,
     ITokenProvider tokenProvider)
     : IAuthService
 {
@@ -57,6 +58,11 @@ public class AuthService
 
         var result = await userManager.CreateAsync(user, command.Password);
         
+        if(result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(user, "User");
+        }
+
         return result.Succeeded;
     }
 
