@@ -1,4 +1,5 @@
 ﻿using Identity.Application.DTOs;
+using Identity.Application.Handlers.RoleHandlers.GetAllRoles;
 
 namespace Identity.Application.Services;
 
@@ -88,11 +89,30 @@ public class RoleService : IRoleService
         return await _roleManager.RoleExistsAsync(roleName);
     }
 
-    public async Task<IEnumerable<RoleResponse>> GetAllRolesAsync()
+    public async Task<GetAllRolesResult> GetAllRolesAsync(int pageNumber, int pageSize)
     {
-        var roles = _roleManager.Roles.Select(r => new RoleResponse(r.Id, r.Name)).ToList();
+        var query = _roleManager.Roles.OrderBy(r => r.Name);
 
-        return roles;
+        var totalRecords = query.Count();
+        var numberOfPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+        var roles = query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(r => new RoleResponse(r.Id.ToString(), r.Name))
+            .ToList();
+
+        return new GetAllRolesResult
+        {
+            Records = roles,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            NumberOfPages = numberOfPages,
+            NumberOfRecordsInPage = roles.Count,
+            NumberOfRecordsFound = totalRecords,
+            HasPreviousPage = pageNumber > 1,
+            HasNextPage = pageNumber < numberOfPages
+        };
     }
 
     public async Task<IEnumerable<UserRoleResponse>> GetUsersInRoleAsync(string roleName)

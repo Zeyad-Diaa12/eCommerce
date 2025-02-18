@@ -17,9 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\RoleHandlers\GetAllRoles\" />
-    <Folder Include="Handlers\RoleHandlers\GetUsersInRole\" />
     <Folder Include="Handlers\RoleHandlers\GetUserRoles\" />
+    <Folder Include="Handlers\RoleHandlers\GetUsersInRole\" />
   </ItemGroup>
 
 </Project>

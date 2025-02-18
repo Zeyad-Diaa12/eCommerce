@@ -7,3 +7,6 @@ global using Identity.Application.IServices;
 global using BuildingBlocks.Helpers;
 global using Identity.Domain.Entites;
 global using BuildingBlocks.Exceptions;
+global using BuildingBlocks.BaseResponse;
+global using BuildingBlocks.CQRS.Query;
+
