@@ -37,3 +37,15 @@ services:
       - "1433:1433"
     volumes:
       - identity_mssqlDb:/var/opt/mssql
+  identity.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Identity=Server=identitydb,1433;Database=master;User ID=sa;Password=Password@SqlServer123;Encrypt=True;TrustServerCertificate=True;
+    ports:
+      - "6001:8080"
+      - "6061:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
