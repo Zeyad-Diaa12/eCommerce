@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Identity.Application.Handlers.RoleHandlers.AssignBulk;
 
-public class AssignBulkHandler
+public class AssignBulkCommandHandler
+    (IRoleService roleService)
+    : ICommandHandler<AssignBulkCommand, AssignBulkResult>
 {
+    public async Task<AssignBulkResult> Handle(AssignBulkCommand command, CancellationToken cancellationToken)
+    {
+        var result = await roleService.AssignUsersToRoleBulkAsync(command.UserIds, command.RoleName);
+        return new AssignBulkResult(result);
+    }
 }
