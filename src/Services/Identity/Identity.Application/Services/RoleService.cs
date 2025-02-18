@@ -160,6 +160,7 @@ public class RoleService : IRoleService
         }
 
         var users = new List<User>();
+        var userRoles = new List<string>();
         var errors = new List<string>();
 
         foreach (var userId in userIds)
@@ -172,7 +173,12 @@ public class RoleService : IRoleService
                     errors.Add($"User {userId} already has role '{roleName}'");
                     continue;
                 }
+                var roles = await _userManager.GetRolesAsync(user);
+
+                var currentRole = roles.FirstOrDefault();
+
                 users.Add(user);
+                userRoles.Add(currentRole!);
             }
             catch (NotFoundException ex)
             {
@@ -185,8 +191,9 @@ public class RoleService : IRoleService
             throw new BadRequestException($"Validation errors:\n{string.Join("\n", errors)}");
         }
 
-        foreach (var user in users)
+        foreach (var (user, role) in users.Zip(userRoles, (user, role) => (user, role)))
         {
+            await _userManager.RemoveFromRoleAsync(user, role!);
             var result = await _userManager.AddToRoleAsync(user, roleName);
             if (!result.Succeeded)
             {
@@ -207,6 +214,7 @@ public class RoleService : IRoleService
         }
 
         var users = new List<User>();
+        var userRoles = new List<string>();
         var errors = new List<string>();
 
         foreach (var userId in userIds)
@@ -225,7 +233,13 @@ public class RoleService : IRoleService
                     errors.Add($"User {userId} doesn't have role '{roleName}'");
                     continue;
                 }
+
+                var roles = await _userManager.GetRolesAsync(user);
+
+                var currentRole = roles.FirstOrDefault();
+
                 users.Add(user);
+                userRoles.Add(currentRole!);
             }
             catch (NotFoundException ex)
             {
@@ -238,9 +252,10 @@ public class RoleService : IRoleService
             throw new ValidationException($"Validation errors:\n{string.Join("\n", errors)}");
         }
 
-        foreach (var user in users)
+        foreach (var (user, role) in users.Zip(userRoles, (user, role) => (user, role)))
         {
             var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+            await _userManager.AddToRoleAsync(user, "User");
             if (!result.Succeeded)
             {
                 throw new InternalServerException($"Failed to remove role from user {user.Id}");
