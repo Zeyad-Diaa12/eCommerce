@@ -16,9 +16,4 @@
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Handlers\RoleHandlers\GetUserRoles\" />
-    <Folder Include="Handlers\RoleHandlers\GetUsersInRole\" />
-  </ItemGroup>
-
 </Project>
