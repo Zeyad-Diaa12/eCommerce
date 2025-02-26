@@ -37,9 +37,9 @@ public class AuthService(
         return await tokenProvider.GenerateToken(user);
     }
 
-    public Task<bool> LogOutAsync(string token)
+    public async Task<bool> LogOutAsync(string userId)
     {
-        throw new NotImplementedException();
+        return await tokenProvider.LogoutUser(userId);
     }
 
     public async Task<LoginUserResult> RefreshTokenAsync(string token, string refreshToken)

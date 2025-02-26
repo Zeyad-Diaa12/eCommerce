@@ -26,6 +26,6 @@ public class RefreshTokenEndpoint : ICarterModule
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Refresh Token")
             .WithDescription("Refresh Token")
-            .AllowAnonymous();
+            .RequireAuthorization("GeneralAccess");
     }
 }
